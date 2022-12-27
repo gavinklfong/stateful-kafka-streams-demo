@@ -1,0 +1,24 @@
+spring:
+  application:
+    name: insurance-claim-processor
+  data:
+    mongodb:
+      uri: mongodb://localhost:27017/testdb
+      username: root
+      password: root
+  kafka:
+    bootstrap-servers: localhost:9092
+    producer:
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+    consumer:
+      value-deserializer: org.apache.kafka.common.serialization.ByteArrayDeserializer
+      auto-offset-reset: earliest
+management:
+  endpoints:
+    web:
+      exposure:
+        include: prometheus
+
+#logging:
+#  level:
+#    root: TRACE
