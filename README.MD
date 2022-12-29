@@ -7,7 +7,7 @@ to another topic "claim-update".
 
 It aims at covering a basic usage of message producer and consumer for anyone to start picking up the knowledge.
 
-![Application Component Diagram](https://github.com/gavinklfong/spring-kafka-demo/blob/main/blob/Sample_App.jpg?raw=true)
+![Application Component Diagram](https://github.com/gavinklfong/spring-kafka-demo/blob/master/blob/Sample_App.jpg?raw=true)
 
 ## Build & Run
 
