@@ -44,3 +44,9 @@ curl --request POST 'http://localhost:8080/claim-2'
 
 Once new instance claim requests are generated, topics will appear on this web UI (http://localhost:3030/kafka-topics-ui/#/)
 and you will be able to see the generated requests on topic "claim-submitted" and the review result on topic "claim-updated"
+
+Run this command to retrieve the output messages from topic "claim-updated":
+```
+curl --request GET 'http://localhost:8080/claim-results'
+```
+
