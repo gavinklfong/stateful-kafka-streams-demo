@@ -44,14 +44,14 @@ public class ClaimsRestController {
         kafkaConsumer.subscribe(Collections.singletonList("claim-updated"));
     }
 
-    @PostMapping("/submit-claim-2")
+    @PostMapping("/claim-2")
     public ResponseEntity<ClaimRequest> generateClaimRequest2() throws ExecutionException, InterruptedException {
         ClaimRequest request = generateClaimRequest();
         kafkaTemplate.send("claim-submitted", request.getCustomerId(), request).get();
         return ResponseEntity.ok().body(request);
     }
 
-    @PostMapping("/submit-claim-1")
+    @PostMapping("/claim-1")
     public ResponseEntity<ClaimRequest> generateClaimRequest1() throws ExecutionException, InterruptedException {
         ClaimRequest request = generateClaimRequest();
         ProducerRecord<String, ClaimRequest> producerRecord = new ProducerRecord<>("claim-submitted", request.getCustomerId(), request);
