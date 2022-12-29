@@ -11,7 +11,6 @@ import org.apache.kafka.common.serialization.StringDeserializer;
 import org.apache.kafka.common.serialization.StringSerializer;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.kafka.KafkaAutoConfiguration;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -23,7 +22,6 @@ import org.springframework.test.context.DynamicPropertySource;
 import org.testcontainers.containers.KafkaContainer;
 import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
-import org.testcontainers.shaded.com.fasterxml.jackson.databind.ObjectMapper;
 import org.testcontainers.utility.DockerImageName;
 import space.gavinklfong.demo.insurance.InsuranceApplication;
 import space.gavinklfong.demo.insurance.config.KafkaConfig;
@@ -62,12 +60,8 @@ class ClaimReqEventListenerIT {
 
     @MockBean
     ClaimReviewService claimReviewService;
-
-    KafkaProducer<Object, Object> kafkaProducer;
-
-    KafkaConsumer<Object, ClaimReviewResult> kafkaConsumer;
-
-    ObjectMapper objectMapper = new ObjectMapper();
+    KafkaProducer<String, ClaimRequest> kafkaProducer;
+    KafkaConsumer<String, ClaimReviewResult> kafkaConsumer;
 
     @BeforeEach
     void setup() {
@@ -76,19 +70,17 @@ class ClaimReqEventListenerIT {
         kafkaConsumer.subscribe(Collections.singletonList("claim-updated"));
     }
 
-    private KafkaProducer<Object, Object> createKafkaProducer() {
+    private KafkaProducer<String, ClaimRequest> createKafkaProducer() {
         Properties props = new Properties();
         props.setProperty(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, kafkaContainer.getBootstrapServers());
-//        props.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, "localhost:9092");
         props.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class.getName());
         props.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, JsonSerializer.class.getName());
         return new KafkaProducer<>(props);
     }
 
-    private KafkaConsumer<Object, ClaimReviewResult> createKafkaConsumer() {
+    private KafkaConsumer<String, ClaimReviewResult> createKafkaConsumer() {
         Properties props = new Properties();
         props.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, kafkaContainer.getBootstrapServers());
-//        props.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, "localhost:9092");
         props.put(ConsumerConfig.GROUP_ID_CONFIG, "kafka-test-consumer");
         props.put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "earliest");
         props.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
@@ -119,16 +111,17 @@ class ClaimReqEventListenerIT {
                 .priority(Priority.HIGH)
                 .build();
 
-        ProducerRecord<Object, Object> producerRecord = new ProducerRecord<>("claim-submitted", request);
+        ProducerRecord<String, ClaimRequest> producerRecord = new ProducerRecord<>("claim-submitted", request);
         kafkaProducer.send(producerRecord).get();
         log.info("claim request sent");
 
         await().atMost(Duration.ofMinutes(1)).untilAsserted(() -> {
-            ConsumerRecords<Object, ClaimReviewResult> records = kafkaConsumer.poll(Duration.ofSeconds(2));
+            ConsumerRecords<String, ClaimReviewResult> records = kafkaConsumer.poll(Duration.ofSeconds(2));
             records.forEach(record -> {
                 log.info("received message: {}", record);
+                assertThat(record.key()).isEqualTo(request.getCustomerId());
             });
-            assertThat(records.count()).isGreaterThan(0);
+            assertThat(records.count()).isEqualTo(1);
         });
     }
 

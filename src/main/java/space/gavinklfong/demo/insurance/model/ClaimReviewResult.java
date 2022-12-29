@@ -5,7 +5,6 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.data.annotation.Id;
 import space.gavinklfong.demo.insurance.dto.Product;
 
 
@@ -15,7 +14,7 @@ import space.gavinklfong.demo.insurance.dto.Product;
 @AllArgsConstructor
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class ClaimReviewResult {
-    @Id
+
     String claimId;
     Product product;
     String customerId;

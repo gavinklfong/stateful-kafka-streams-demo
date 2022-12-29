@@ -1,11 +1,6 @@
 spring:
   application:
     name: insurance-claim-processor
-  data:
-    mongodb:
-      uri: mongodb://localhost:27017/testdb
-      username: root
-      password: root
   kafka:
     bootstrap-servers: localhost:9092
     producer:
@@ -18,7 +13,3 @@ management:
     web:
       exposure:
         include: prometheus
-
-#logging:
-#  level:
-#    root: TRACE

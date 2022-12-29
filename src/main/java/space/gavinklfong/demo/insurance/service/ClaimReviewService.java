@@ -2,18 +2,14 @@ package space.gavinklfong.demo.insurance.service;
 
 import com.github.javafaker.Faker;
 import io.micrometer.core.instrument.Counter;
-import io.micrometer.core.instrument.MeterRegistry;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.apache.commons.lang3.RandomUtils;
 import org.springframework.stereotype.Service;
 import space.gavinklfong.demo.insurance.dto.ClaimRequest;
 import space.gavinklfong.demo.insurance.dto.Product;
 import space.gavinklfong.demo.insurance.model.ClaimReviewResult;
 import space.gavinklfong.demo.insurance.model.Status;
-import space.gavinklfong.demo.insurance.repository.ClaimProcessRepository;
-
-import java.util.Random;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -21,8 +17,6 @@ import java.util.Random;
 public class ClaimReviewService {
 
     private static final int PROCESS_TIME_LOWER_BOUND = 500;
-
-    private final ClaimProcessRepository claimProcessRepo;
 
     private final Counter approvedClaimCounter;
     private final Counter needFollowupClaimCounter;
@@ -35,9 +29,7 @@ public class ClaimReviewService {
 
         // Simulate claim process
         try {
-            Random random = new Random();
-            long processingTime = PROCESS_TIME_LOWER_BOUND + random.nextInt(500);
-            Thread.sleep(processingTime);
+            Thread.sleep(RandomUtils.nextInt(PROCESS_TIME_LOWER_BOUND, 500));
 
             Faker faker = new Faker();
 
@@ -59,8 +51,6 @@ public class ClaimReviewService {
                     .remarks(faker.lorem().sentence())
                     .build();
 
-            result = claimProcessRepo.save(result);
-
             updateClaimStatusMetric(result);
 
             long end = System.currentTimeMillis();
@@ -70,7 +60,7 @@ public class ClaimReviewService {
 
         } catch (InterruptedException e) {
             long end = System.currentTimeMillis();
-            log.error("claim process failed. processing time = {}, claim = {}", (end - start), claimRequest.toString());
+            log.error("claim process failed. processing time = {}, claim = {}", (end - start), claimRequest);
             throw new RuntimeException("claim process failed. id = " + claimRequest.getId());
         }
     }

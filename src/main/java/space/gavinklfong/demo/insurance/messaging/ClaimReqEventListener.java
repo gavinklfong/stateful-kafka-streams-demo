@@ -1,6 +1,5 @@
 package space.gavinklfong.demo.insurance.messaging;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.annotation.KafkaListener;
@@ -10,23 +9,22 @@ import space.gavinklfong.demo.insurance.dto.ClaimRequest;
 import space.gavinklfong.demo.insurance.model.ClaimReviewResult;
 import space.gavinklfong.demo.insurance.service.ClaimReviewService;
 
+import static space.gavinklfong.demo.insurance.config.KafkaConfig.CLAIM_SUBMITTED_TOPIC;
+import static space.gavinklfong.demo.insurance.config.KafkaConfig.CLAIM_UPDATED_TOPIC;
+
 @Slf4j
 @Component
 public class ClaimReqEventListener {
-
     @Autowired
     private ClaimReviewService claimReviewService;
-
     @Autowired
-    private KafkaTemplate<Object, Object> kafkaTemplate;
+    private KafkaTemplate<String, ClaimReviewResult> kafkaTemplate;
 
-    @KafkaListener(id = "newClaimHandler", topics = "claim-submitted")
+    @KafkaListener(id = "new-claim-handler", topics = CLAIM_SUBMITTED_TOPIC)
     public void handleClaimRequestEvent(ClaimRequest claimRequest)  {
         log.info("Claim request received: {}", claimRequest);
         ClaimReviewResult result = claimReviewService.processClaimRequest(claimRequest);
-        kafkaTemplate.send("claim-updated", result);
-//        kafkaTemplate.flush();
+        kafkaTemplate.send(CLAIM_UPDATED_TOPIC, result.getCustomerId(), result);
     }
-
 }
 

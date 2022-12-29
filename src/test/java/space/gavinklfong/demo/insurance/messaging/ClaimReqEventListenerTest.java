@@ -5,9 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.kafka.KafkaAutoConfiguration;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.context.annotation.Import;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringJUnitConfig;
@@ -30,7 +28,7 @@ import static org.mockito.Mockito.*;
 class ClaimReqEventListenerTest {
 
     @MockBean
-    private KafkaTemplate<Object, Object> kafkaTemplate;
+    private KafkaTemplate<String, ClaimReviewResult> kafkaTemplate;
 
     @MockBean
     private ClaimReviewService claimReviewService;
@@ -39,7 +37,7 @@ class ClaimReqEventListenerTest {
     private ClaimReqEventListener claimReqEventListener;
 
     @Test
-    void whenClaimRequestArrived_thenInvokeClaimProcessServiceAndClaimStatusUpdateGateway() throws JsonProcessingException {
+    void whenClaimRequestArrived_thenInvokeClaimProcessServiceAndClaimStatusUpdateGateway() {
 
         when(claimReviewService.processClaimRequest((any(ClaimRequest.class)))).thenAnswer(invocation -> {
             ClaimRequest request = invocation.getArgument(0);
@@ -50,7 +48,7 @@ class ClaimReqEventListenerTest {
                     .build();
         });
 
-        ClaimRequest message = ClaimRequest.builder()
+        ClaimRequest request = ClaimRequest.builder()
                 .id(UUID.randomUUID().toString())
                 .customerId(UUID.randomUUID().toString())
                 .product(Product.MEDICAL)
@@ -58,9 +56,9 @@ class ClaimReqEventListenerTest {
                 .priority(Priority.HIGH)
                 .build();
 
-        claimReqEventListener.handleClaimRequestEvent(message);
+        claimReqEventListener.handleClaimRequestEvent(request);
 
-        verify(kafkaTemplate).send(eq("claim-updated"), any(ClaimReviewResult.class));
+        verify(kafkaTemplate).send(eq("claim-updated"), eq(request.getCustomerId()), any(ClaimReviewResult.class));
     }
 
 }

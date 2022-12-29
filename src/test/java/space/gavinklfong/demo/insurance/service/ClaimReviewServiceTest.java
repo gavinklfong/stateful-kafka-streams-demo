@@ -1,40 +1,28 @@
 package space.gavinklfong.demo.insurance.service;
 
 import io.micrometer.core.instrument.Counter;
-import io.micrometer.core.instrument.MeterRegistry;
 import lombok.extern.slf4j.Slf4j;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit.jupiter.SpringJUnitConfig;
 import space.gavinklfong.demo.insurance.dto.ClaimRequest;
 import space.gavinklfong.demo.insurance.dto.Priority;
 import space.gavinklfong.demo.insurance.dto.Product;
 import space.gavinklfong.demo.insurance.model.ClaimReviewResult;
 import space.gavinklfong.demo.insurance.model.Status;
-import space.gavinklfong.demo.insurance.repository.ClaimProcessRepository;
 
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.Assert.assertEquals;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.*;
 
 @Slf4j
 @ExtendWith(MockitoExtension.class)
 @Tag("UnitTest")
 class ClaimReviewServiceTest {
 
-    @Mock
-    private ClaimProcessRepository claimProcessRepository;
     @Mock
     private Counter approvedClaimCounter;
     @Mock
@@ -43,12 +31,6 @@ class ClaimReviewServiceTest {
     private Counter declinedClaimCounter;
     @InjectMocks
     private ClaimReviewService claimReviewService;
-
-    @BeforeEach
-    void setup() {
-        when(claimProcessRepository.save(any(ClaimReviewResult.class))).thenAnswer(invocation ->
-                invocation.getArgument(0));
-    }
 
     @Test
     void givenMedicalClaimWithSmallAmount_whenRunClaimProcess_thenReturnApprovedStatus() {
@@ -62,7 +44,6 @@ class ClaimReviewServiceTest {
 
         ClaimReviewResult result = claimReviewService.processClaimRequest(request);
 
-        verify(claimProcessRepository).save((any(ClaimReviewResult.class)));
         assertClaimReviewResult(result, request, Status.APPROVED);
     }
 
@@ -78,7 +59,6 @@ class ClaimReviewServiceTest {
 
         ClaimReviewResult result = claimReviewService.processClaimRequest(request);
 
-        verify(claimProcessRepository).save((any(ClaimReviewResult.class)));
         assertClaimReviewResult(result, request, Status.DECLINED);
     }
 
@@ -94,7 +74,6 @@ class ClaimReviewServiceTest {
 
         ClaimReviewResult result = claimReviewService.processClaimRequest(request);
 
-        verify(claimProcessRepository).save((any(ClaimReviewResult.class)));
         assertClaimReviewResult(result, request, Status.NEED_FOLLOW_UP);
     }
 

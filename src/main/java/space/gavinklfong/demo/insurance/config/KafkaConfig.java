@@ -5,40 +5,27 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.kafka.annotation.EnableKafka;
 import org.springframework.kafka.config.TopicBuilder;
-import org.springframework.kafka.core.ProducerFactory;
-import org.springframework.kafka.support.converter.JsonMessageConverter;
+import org.springframework.kafka.support.converter.ByteArrayJsonMessageConverter;
 import org.springframework.kafka.support.converter.RecordMessageConverter;
-import space.gavinklfong.demo.insurance.dto.ClaimRequest;
-
-import java.util.HashMap;
-import java.util.Map;
 
 @EnableKafka
 @Configuration
 public class KafkaConfig {
+    public static final String CLAIM_SUBMITTED_TOPIC = "claim-submitted";
+    public static final String CLAIM_UPDATED_TOPIC = "claim-updated";
 
     @Bean
     public NewTopic claimSubmittedTopic() {
-        return TopicBuilder.name("claim-submitted")
-                .build();
+        return TopicBuilder.name(CLAIM_SUBMITTED_TOPIC).build();
     }
 
     @Bean
     public NewTopic claimUpdatedTopic() {
-        return TopicBuilder.name("claim-updated")
-                .build();
+        return TopicBuilder.name(CLAIM_UPDATED_TOPIC).build();
     }
 
     @Bean
     public RecordMessageConverter recordMessageConverter() {
-        return new JsonMessageConverter();
+        return new ByteArrayJsonMessageConverter();
     }
-
-//    public ProducerFactory<String, ClaimRequest> producerFactoryServingDetail() {
-//        Map<String, Object> config = new HashMap<>();
-//        config.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, "127.0.0.1:9092");
-//        config.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
-//        config.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, JsonSerializer.class);
-//        return new DefaultKafkaProducerFactory(config);
-//    }
 }
