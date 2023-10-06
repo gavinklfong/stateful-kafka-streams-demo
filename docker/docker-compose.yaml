@@ -9,3 +9,8 @@ services:
       - 3030:3030
       - 9092:9092
       - 2181:2181
+  localstack:
+    image: localstack/localstack:latest
+    ports:
+      - "127.0.0.1:4566:4566"            # LocalStack Gateway
+      - "127.0.0.1:4510-4559:4510-4559"  # external services port range
