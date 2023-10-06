@@ -1,13 +1,11 @@
 spring:
   application:
-    name: insurance-claim-processor
+    name: shopping-order-producer
   kafka:
     bootstrap-servers: localhost:9092
     producer:
+      key-serializer: org.springframework.kafka.support.serializer.JsonSerializer
       value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
-    consumer:
-      value-deserializer: org.apache.kafka.common.serialization.ByteArrayDeserializer
-      auto-offset-reset: earliest
 management:
   endpoints:
     web:

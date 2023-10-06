@@ -5,18 +5,29 @@
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>3.0.1</version>
+		<version>3.1.4</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>space.gavinklfong.demo</groupId>
-	<artifactId>kafka-insurance-claim-processor</artifactId>
+	<artifactId>shopping-order-producer</artifactId>
 	<version>0.0.1</version>
-	<name>insurance</name>
-	<description>Kafka Insurance Claim Processor Demo</description>
+	<name>shopping-order-producer</name>
+	<description>Kafka Shopping Order Producer</description>
 	<properties>
 		<java.version>17</java.version>
-		<testcontainers.version>1.17.6</testcontainers.version>
+		<testcontainers.version>1.19.1</testcontainers.version>
 	</properties>
+	<dependencyManagement>
+		<dependencies>
+			<dependency>
+				<groupId>org.testcontainers</groupId>
+				<artifactId>testcontainers-bom</artifactId>
+				<version>${testcontainers.version}</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
 	<dependencies>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -94,17 +105,7 @@
 			<version>1.0.2</version>
 		</dependency>
 	</dependencies>
-	<dependencyManagement>
-		<dependencies>
-			<dependency>
-				<groupId>org.testcontainers</groupId>
-				<artifactId>testcontainers-bom</artifactId>
-				<version>${testcontainers.version}</version>
-				<type>pom</type>
-				<scope>import</scope>
-			</dependency>
-		</dependencies>
-	</dependencyManagement>
+
 
 	<repositories>
 		<repository>
