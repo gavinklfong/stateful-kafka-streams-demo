@@ -1,52 +1,29 @@
-# Spring Boot Kafka Demo 
+# Kafka S3 Sink Connector & Source Connector Exercise
 
 ## Overview
-This is to demonstrate the use of Kafka client library and Spring Kafka. The sample application is a message driven 
-insurance claim review process, it consumes claim requests from topic "claim-submitted" and output the review result
-to another topic "claim-update". 
+This is to demonstrate the use of S3 connectors. The shopping-order-producer randomly generates shopping orders
+to a Kafka topic `shopping-orders` every 0.5 sec
 
-It aims at covering a basic usage of message producer and consumer for anyone to start picking up the knowledge.
+Here is the exercise:
+* Set up S3 sink connector that sinks the topic into S3 bucket `shopping-orders`
+* Set up S3 source connector that sync data from the same S3 bucket to another topic `shopping-orders-copy`
 
-![Application Component Diagram](https://github.com/gavinklfong/spring-kafka-demo/blob/master/blob/Sample_App.jpg?raw=true)
+## How to start local environment
 
-## Build & Run
-
-Your local environment should have Java 17, maven and docker installed in order to build and run this applcation.
-
-First of all, start up a Kafka in docker container:
+Run this command to start the local environment in docker containers:
 ```
-docker run -e ADV_HOST=127.0.0.1 -e SAMPLEDATA=0 -e RUNTESTS=0 -p 3030:3030 -p 9092:9092 \
---rm landoop/fast-data-dev:latest
+./docker/start-cluster.sh
 ```
 
-As the docker container is up and running, you should be able to see the web UI when accessing to http://localhost:3030 
+Kafka and LocalStack will be started. You can access the Kafka using [Web UI](http://localhost:3030)
 
-Run this command to build and run the application
+LocalStack is to run S3 bucket on local environment.
 
+Next, run the shopping order producer
 ```
-mvn spring-boot:run
-```
-
-## Manual Test
-
-Look at the source code of `ClaimsRequestController` which shows you how to produce Kafka messages using 
-Kafka client library and Spring `KafkaTemplate` respectively:
-
-Run this command to produce a new insurance claim request using kafka client library:
-```
-curl --request POST 'http://localhost:8080/claim-1'
+docker run --rm --net=host whalebig27/shopping-order-producer:latest
 ```
 
-This command produce a new instance claim request using Spring `KafkaTemplate`:
-```
-curl --request POST 'http://localhost:8080/claim-2'
-```
+Then, you will see the messages published into topic `shopping-orders`
 
-Once new instance claim requests are generated, topics will appear on this web UI (http://localhost:3030/kafka-topics-ui/#/)
-and you will be able to see the generated requests on topic "claim-submitted" and the review result on topic "claim-updated"
-
-Run this command to retrieve the output messages from topic "claim-updated":
-```
-curl --request GET 'http://localhost:8080/claim-results'
-```
-
+Connector properties files and useful commands can be found in `./docker` folder
