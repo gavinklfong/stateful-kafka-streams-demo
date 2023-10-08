@@ -1,0 +1,7 @@
+@namespace("space.gavinklfong.demo.ecommerce.schema")
+protocol AppProtocol {
+	record ShoppingOrderKey {
+		string customerId;
+		string orderId;
+	}
+}

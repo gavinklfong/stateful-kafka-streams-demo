@@ -27,11 +27,20 @@ public class KafkaConfig {
     public KafkaProducer<ShoppingOrderKey, ShoppingOrder> shoppingOrderKafkaProducer(@Value("${spring.kafka.bootstrap-servers}") String kafkaServer) {
         Properties props = new Properties();
         props.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, kafkaServer);
-//        props.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, JsonSerializer.class);
-//        props.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, JsonSerializer.class);
+        props.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, JsonSerializer.class);
+        props.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, JsonSerializer.class);
+        return new KafkaProducer<>(props);
+    }
+
+    @Bean
+    public KafkaProducer<space.gavinklfong.demo.ecommerce.schema.ShoppingOrderKey, space.gavinklfong.demo.ecommerce.schema.ShoppingOrder> avroShoppingOrderKafkaProducer(
+            @Value("${spring.kafka.bootstrap-servers}") String kafkaServer,
+            @Value("${spring.kafka.schema-registry}") String schemaRegistry) {
+        Properties props = new Properties();
+        props.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, kafkaServer);
         props.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, KafkaAvroSerializer.class);
         props.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, KafkaAvroSerializer.class);
-        props.put("schema.registry.url", "http://localhost:8081");
+        props.put("schema.registry.url", schemaRegistry);
         return new KafkaProducer<>(props);
     }
 }

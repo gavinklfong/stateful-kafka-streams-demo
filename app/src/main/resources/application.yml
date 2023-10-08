@@ -1,0 +1,22 @@
+
+spring:
+  main:
+    web-application-type: none
+  application:
+    name: shopping-order-producer
+  kafka:
+    bootstrap-servers: localhost:9092
+    schema-registry: http://localhost:8081
+    producer:
+      key-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+management:
+  endpoints:
+    web:
+      exposure:
+        include: prometheus
+
+shopping-order-producer:
+  topic-avro: shopping-orders-avro
+  topic-json: shopping-orders
+  fixed-rate: 500

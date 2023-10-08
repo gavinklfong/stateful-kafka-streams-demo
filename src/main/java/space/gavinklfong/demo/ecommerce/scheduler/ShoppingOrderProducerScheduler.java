@@ -16,7 +16,7 @@ public class ShoppingOrderProducerScheduler {
 
     private final ShoppingOrderService shoppingOrderService;
 
-    @Scheduled(fixedRate = 1000)
+    @Scheduled(fixedRate = 500)
     public void scheduleFixedRateTask() throws ExecutionException, InterruptedException {
         ShoppingOrder shoppingOrder = shoppingOrderService.sendShoppingOrder();
         log.info("Shopping order sent: {}", shoppingOrder);

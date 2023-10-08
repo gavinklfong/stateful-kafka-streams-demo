@@ -1,0 +1,1 @@
+ aws --endpoint-url=http://localhost:4566 s3 cp s3://shopping-orders-json/topics/shopping-orders-json/partition=0/shopping-orders-json+0+0000000000.json ./shopping-orders+0+0000000000.json
