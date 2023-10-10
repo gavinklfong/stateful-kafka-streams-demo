@@ -9,13 +9,12 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>space.gavinklfong.demo</groupId>
-	<artifactId>shopping-order-producer</artifactId>
+	<artifactId>transaction-producer</artifactId>
 	<version>0.0.1</version>
 	<packaging>pom</packaging>
-	<name>shopping-order-producer</name>
-	<description>Kafka Shopping Order Producer</description>
+	<name>transaction-producer</name>
+	<description>Kafka Transaction Producer</description>
 	<modules>
-		<module>avro-schema</module>
 		<module>app</module>
 	</modules>
 	<properties>
@@ -23,6 +22,8 @@
 		<testcontainers.version>1.19.1</testcontainers.version>
 		<io.confluent.version>7.3.1</io.confluent.version>
 		<avro.version>1.11.0</avro.version>
+		<commons-csv.version>1.10.0</commons-csv.version>
+		<org.apache.kafka.version>3.5.0</org.apache.kafka.version>
 	</properties>
 	<dependencyManagement>
 		<dependencies>
@@ -37,6 +38,17 @@
 				<groupId>org.apache.avro</groupId>
 				<artifactId>avro</artifactId>
 				<version>${avro.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.commons</groupId>
+				<artifactId>commons-csv</artifactId>
+				<version>${commons-csv.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.kafka</groupId>
+				<artifactId>kafka-streams-test-utils</artifactId>
+				<version>${org.apache.kafka.version}</version>
+				<scope>test</scope>
 			</dependency>
 		</dependencies>
 	</dependencyManagement>
