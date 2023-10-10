@@ -1,8 +1,8 @@
 package space.gavinklfong.demo.finance.util;
 
 import org.apache.commons.lang3.RandomUtils;
-import space.gavinklfong.demo.finance.model.TransactionType;
 import space.gavinklfong.demo.finance.model.Transaction;
+import space.gavinklfong.demo.finance.model.TransactionType;
 
 import java.time.LocalDate;
 import java.util.concurrent.ThreadLocalRandom;

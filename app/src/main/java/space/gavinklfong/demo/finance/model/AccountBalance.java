@@ -1,15 +1,14 @@
 package space.gavinklfong.demo.finance.model;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import lombok.Builder;
-import lombok.RequiredArgsConstructor;
-import lombok.Value;
+import lombok.*;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @Value
 @Builder(toBuilder = true)
+@NoArgsConstructor(force = true)
 @RequiredArgsConstructor
 public class AccountBalance {
     String account;

@@ -33,7 +33,7 @@ public class TransactionSerdes {
 
     public static JsonSerde<String> accountBalanceKey() {
         JsonSerde<String> serde = new JsonSerde<>(String.class);
-        serde.configure(getSerDeConfig(), false);
+        serde.configure(getSerDeConfig(), true);
         return serde;
     }
 

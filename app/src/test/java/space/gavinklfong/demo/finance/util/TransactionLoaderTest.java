@@ -9,9 +9,11 @@ import java.util.List;
 @Slf4j
 class TransactionLoaderTest {
 
+    private static final String CSV_FILE = "/transaction-history.csv";
+
     @Test
     void loadCSV() {
-        List<Transaction> transactions = TransactionLoader.loadTransactions();
+        List<Transaction> transactions = TransactionLoader.loadTransactions(CSV_FILE);
         transactions.forEach(t -> log.info("{}", t));
     }
 }
