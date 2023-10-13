@@ -23,7 +23,7 @@ public class KafkaConfig {
     }
 
     @Bean
-    public KafkaProducer<TransactionKey, Transaction> shoppingOrderKafkaProducer(@Value("${spring.kafka.bootstrap-servers}") String kafkaServer) {
+    public KafkaProducer<TransactionKey, Transaction> kafkaProducer(@Value("${spring.kafka.bootstrap-servers}") String kafkaServer) {
         Properties props = new Properties();
         props.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, kafkaServer);
         props.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, JsonSerializer.class);

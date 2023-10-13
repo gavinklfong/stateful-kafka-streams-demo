@@ -16,7 +16,6 @@ management:
       exposure:
         include: prometheus
 
-shopping-order-producer:
-  topic-avro: shopping-orders-avro
-  topic-json: shopping-orders
-  fixed-rate: 500
+transaction-producer:
+  topic: transactions
+  fixed-rate: 1000

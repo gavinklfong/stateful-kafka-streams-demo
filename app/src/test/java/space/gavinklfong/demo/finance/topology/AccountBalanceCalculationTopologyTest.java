@@ -1,8 +1,6 @@
 package space.gavinklfong.demo.finance.topology;
 
 import lombok.extern.slf4j.Slf4j;
-import org.apache.kafka.common.serialization.Serde;
-import org.apache.kafka.common.serialization.Serdes;
 import org.apache.kafka.streams.*;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -22,8 +20,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 @Slf4j
 class AccountBalanceCalculationTopologyTest {
 
-    private static final String TRANSACTION_CSV = "/transaction-history-test.csv";
-    private static final String ACCOUNT_BALANCE_CSV = "/account-balance-history-test.csv";
+    private static final String TRANSACTION_CSV = "/transactions-test.csv";
+    private static final String ACCOUNT_BALANCE_CSV = "/account-balances-test.csv";
 
     private TopologyTestDriver testDriver;
     private TestInputTopic<TransactionKey, Transaction> inputTopic;
@@ -38,10 +36,10 @@ class AccountBalanceCalculationTopologyTest {
 
         testDriver = new TopologyTestDriver(topology, props);
 
-        inputTopic = testDriver.createInputTopic("transaction-history",
+        inputTopic = testDriver.createInputTopic("transactions",
                 TransactionSerdes.transactionKey().serializer(),
                 TransactionSerdes.transaction().serializer());
-        outputTopic = testDriver.createOutputTopic("account-balance-history",
+        outputTopic = testDriver.createOutputTopic("account-balances",
                 TransactionSerdes.accountBalanceKey().deserializer(),
                 TransactionSerdes.accountBalance().deserializer());
     }

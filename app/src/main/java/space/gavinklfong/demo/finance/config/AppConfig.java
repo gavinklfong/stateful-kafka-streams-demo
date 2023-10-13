@@ -14,7 +14,7 @@ import space.gavinklfong.demo.finance.service.TransactionService;
 public class AppConfig {
 
     @Bean
-    public TransactionService shoppingOrderProducer(@Value("${shopping-order-producer.topic-json}") String topic,
+    public TransactionService shoppingOrderProducer(@Value("${transaction-producer.topic}") String topic,
                                                         KafkaProducer<TransactionKey, Transaction> kafkaProducer) {
         return new TransactionService(topic, kafkaProducer);
     }

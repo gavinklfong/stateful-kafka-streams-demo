@@ -1,7 +1,10 @@
 package space.gavinklfong.demo.finance.model;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import lombok.*;
+import lombok.Builder;
+import lombok.NoArgsConstructor;
+import lombok.RequiredArgsConstructor;
+import lombok.Value;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;

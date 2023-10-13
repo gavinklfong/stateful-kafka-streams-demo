@@ -1,1 +1,0 @@
-docker run --rm --net=host whalebig27/shopping-order-producer:latest

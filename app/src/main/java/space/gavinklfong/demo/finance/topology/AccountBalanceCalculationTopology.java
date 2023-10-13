@@ -34,7 +34,7 @@ public class AccountBalanceCalculationTopology {
         );
         builder.addStateStore(accountBalanceStoreBuilder);
 
-        KStream<TransactionKey, Transaction> source = builder.stream("transaction-history",
+        KStream<TransactionKey, Transaction> source = builder.stream("transactions",
                         Consumed.with(TransactionSerdes.transactionKey(), TransactionSerdes.transaction()))
                         .peek((key, value) -> log.info("input - key: {}, value: {}", key, value), Named.as("log-input"));
 
@@ -42,7 +42,7 @@ public class AccountBalanceCalculationTopology {
                 .flatMapValues(v -> v)
                 .selectKey((key, value) -> value.getAccount())
                 .peek((key, value) -> log.info("output - key: {}, value: {}", key, value), Named.as("log-output"))
-                .to("account-balance-history",
+                .to("account-balances",
                         Produced.with(TransactionSerdes.accountBalanceKey(), TransactionSerdes.accountBalance()));
 
         return builder.build();

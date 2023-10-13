@@ -6,25 +6,25 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import space.gavinklfong.demo.finance.model.Transaction;
 import space.gavinklfong.demo.finance.service.TransactionService;
-import space.gavinklfong.demo.finance.util.TransactionGenerator;
+import space.gavinklfong.demo.finance.util.TransactionLoader;
 
-import java.util.List;
+import java.util.Iterator;
 
 @Slf4j
 @RequiredArgsConstructor
 @Component
 public class TransactionProducerScheduler {
+    private static final String CSV_FILE = "/transactions.csv";
+    private static final Iterator<Transaction> TRANSACTIONS = TransactionLoader.loadTransactions(CSV_FILE).iterator();
 
     private final TransactionService transactionService;
 
-    @Scheduled(fixedRateString = "${shopping-order-producer.fixed-rate}")
+    @Scheduled(fixedRateString = "${transaction-producer.fixed-rate}")
     public void scheduleFixedRateTask() {
-
-        List<String> accounts = List.of("001-00001", "001-00101", "001-00201", "001-00301");
-
-        Transaction transaction = TransactionGenerator.generateRandomTransaction();
-        transactionService.sendShoppingOrder(transaction);
-//        avroShoppingOrderService.sendShoppingOrder(AvroMapper.mapToAvro(shoppingOrder));
-        log.info("Shopping order sent: {}", transaction);
+        if (TRANSACTIONS.hasNext()) {
+            Transaction transaction = TRANSACTIONS.next();
+            transactionService.sendShoppingOrder(transaction);
+            log.info("Transaction sent: {}", transaction);
+        }
     }
 }

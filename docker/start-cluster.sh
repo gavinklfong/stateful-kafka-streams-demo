@@ -7,5 +7,4 @@ docker compose up -d
 
 sleep 3
 
-${BASEDIR}/s3-create-bucket.sh
-${BASEDIR}/create-topic.sh
+${BASEDIR}/create-topics.sh
