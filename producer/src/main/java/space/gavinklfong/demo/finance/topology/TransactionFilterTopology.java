@@ -25,4 +25,5 @@ public class TransactionFilterTopology {
                         Produced.with(TransactionSerdes.transactionKey(), TransactionSerdes.transaction()));
 
         return builder.build();
-    }}
+    }
+}

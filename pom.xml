@@ -15,8 +15,11 @@
 	<name>transaction-producer</name>
 	<description>Kafka Transaction Producer</description>
 	<modules>
-		<module>app</module>
-    </modules>
+		<module>data-model</module>
+		<module>producer</module>
+		<module>transaction-filter-topology</module>
+		<module>account-balance-calculation-topology</module>
+	</modules>
 	<properties>
 		<java.version>17</java.version>
 		<testcontainers.version>1.19.1</testcontainers.version>
