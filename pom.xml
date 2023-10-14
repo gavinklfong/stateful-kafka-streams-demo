@@ -27,6 +27,7 @@
 		<avro.version>1.11.0</avro.version>
 		<commons-csv.version>1.10.0</commons-csv.version>
 		<org.apache.kafka.version>3.5.0</org.apache.kafka.version>
+		<commons-lang3.version>3.13.0</commons-lang3.version>
 	</properties>
 	<dependencyManagement>
 		<dependencies>
@@ -52,6 +53,11 @@
 				<artifactId>kafka-streams-test-utils</artifactId>
 				<version>${org.apache.kafka.version}</version>
 				<scope>test</scope>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.commons</groupId>
+				<artifactId>commons-lang3</artifactId>
+				<version>${commons-lang3.version}</version>
 			</dependency>
 		</dependencies>
 	</dependencyManagement>

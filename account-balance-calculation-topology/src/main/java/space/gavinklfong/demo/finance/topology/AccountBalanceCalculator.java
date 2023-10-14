@@ -3,6 +3,7 @@ package space.gavinklfong.demo.finance.topology;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.streams.processor.api.Processor;
 import org.apache.kafka.streams.processor.api.ProcessorContext;
+import org.apache.kafka.streams.processor.api.Record;
 import org.apache.kafka.streams.state.KeyValueStore;
 import space.gavinklfong.demo.finance.model.AccountBalance;
 import space.gavinklfong.demo.finance.model.Transaction;

@@ -8,8 +8,6 @@ import org.junit.jupiter.api.Test;
 import space.gavinklfong.demo.finance.model.AccountBalance;
 import space.gavinklfong.demo.finance.model.Transaction;
 import space.gavinklfong.demo.finance.model.TransactionKey;
-import space.gavinklfong.demo.finance.topology.AccountBalanceCalculationTopology;
-import space.gavinklfong.demo.finance.topology.TransactionSerdes;
 import space.gavinklfong.demo.finance.util.AccountBalanceLoader;
 import space.gavinklfong.demo.finance.util.TransactionLoader;
 
