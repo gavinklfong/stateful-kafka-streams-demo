@@ -1,0 +1,1 @@
+docker run --rm --net=host whalebig27/account-balance-calculation-topology:latest

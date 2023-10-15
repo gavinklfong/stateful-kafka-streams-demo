@@ -125,7 +125,7 @@
                 </executions>
                 <configuration>
                     <image>
-                        <name>whalebig27account-balance-calculation-topology</name>
+                        <name>whalebig27/account-balance-calculation-topology</name>
                     </image>
                 </configuration>
             </plugin>

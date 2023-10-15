@@ -1,29 +1,37 @@
-# Kafka S3 Sink Connector & Source Connector Exercise
+# Demonstration of Stateful Kafka Streams Data Processing
 
 ## Overview
-This is to demonstrate the use of S3 connectors. The shopping-order-producer randomly generates shopping orders
-to a Kafka topic `shopping-orders` every 0.5 sec
+This is to demonstrate the implementation of stateful data stream processing using Kafka Streams. 
+The transaction-producer generates transactions every 1 second to a Kafka topic `transactions` and a topology
+calculate account balance in a real time based on the previous balance.
 
-Here is the exercise:
-* Set up S3 sink connector that sinks the topic into S3 bucket `shopping-orders`
-* Set up S3 source connector that sync data from the same S3 bucket to another topic `shopping-orders-copy`
+These 2 modules give you the idea how to build stateless and stateful data stream processing:
+- **transaction-filter-topology**: Stateless topology of transaction filter that output only transfer transaction
+- **account-balance-calculation-topology**: Stateful topology of account balance calculation using Kafka key-value state store 
 
 ## How to start local environment
 
 Run this command to start the local environment in docker containers:
 ```
-./docker/start-cluster.sh
+docker run -e ADV_HOST=127.0.0.1 -e SAMPLEDATA=0 -e RUNTESTS=0 -p 3030:3030 -p 9092:9092 --rm landoop/fast-data-dev:latest
 ```
 
-Kafka and LocalStack will be started. You can access the Kafka using [Web UI](http://localhost:3030)
+Kafka will be started. You can access the Kafka using [Web UI](http://localhost:3030)
 
-LocalStack is to run S3 bucket on local environment.
-
-Next, run the shopping order producer
+Next, run the transaction producer
 ```
-docker run --rm --net=host whalebig27/shopping-order-producer:latest
+docker run --rm --net=host whalebig27/transaction-producer:latest
+```
+Then, you will see the messages published into topic `transactions`
+
+**Run Transaction Filter Topology**
+Start up the topology and check the output on topic `transfer-transactions`
+```
+docker run --rm --net=host whalebig27/transaction-filter-topology:latest
 ```
 
-Then, you will see the messages published into topic `shopping-orders`
-
-Connector properties files and useful commands can be found in `./docker` folder
+**Run Account Balance Calculation Topology**
+Start up the topology and check the output on topic `account-balances`
+```
+docker run --rm --net=host whalebig27/account-balance-calculation-topology:latest
+```
