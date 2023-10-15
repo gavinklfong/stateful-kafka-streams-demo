@@ -10,7 +10,7 @@ import java.util.List;
 @Slf4j
 class TransactionLoaderTest {
 
-    private static final String CSV_FILE = "/transaction-history.csv";
+    private static final String CSV_FILE = "/transactions-test.csv";
 
     @Test
     void loadCSV() {

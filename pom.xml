@@ -28,6 +28,7 @@
 		<commons-csv.version>1.10.0</commons-csv.version>
 		<org.apache.kafka.version>3.5.0</org.apache.kafka.version>
 		<commons-lang3.version>3.13.0</commons-lang3.version>
+		<dockerfile-maven.version>1.4.13</dockerfile-maven.version>
 	</properties>
 	<dependencyManagement>
 		<dependencies>

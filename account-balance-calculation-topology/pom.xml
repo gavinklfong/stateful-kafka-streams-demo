@@ -109,4 +109,26 @@
         </dependency>
 
     </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>repackage</goal>
+                            <goal>build-image</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <image>
+                        <name>whalebig27account-balance-calculation-topology</name>
+                    </image>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
 </project>
