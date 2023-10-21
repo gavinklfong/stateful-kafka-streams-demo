@@ -13,9 +13,11 @@ import org.apache.kafka.streams.kstream.Produced;
 import org.apache.kafka.streams.state.KeyValueStore;
 import org.apache.kafka.streams.state.StoreBuilder;
 import org.apache.kafka.streams.state.Stores;
-import space.gavinklfong.demo.finance.model.AccountBalance;
 import space.gavinklfong.demo.finance.model.Transaction;
 import space.gavinklfong.demo.finance.model.TransactionKey;
+import space.gavinklfong.demo.finance.schema.AccountBalance;
+
+import java.math.BigDecimal;
 
 @Slf4j
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
@@ -27,10 +29,10 @@ public class AccountBalanceCalculationTopology {
 
         StreamsBuilder builder = new StreamsBuilder();
 
-        StoreBuilder<KeyValueStore<String, AccountBalance>> accountBalanceStoreBuilder = Stores.keyValueStoreBuilder(
+        StoreBuilder<KeyValueStore<String, String>> accountBalanceStoreBuilder = Stores.keyValueStoreBuilder(
                 Stores.persistentKeyValueStore(STATE_STORE),
                 Serdes.String(),
-                TransactionSerdes.accountBalance()
+                Serdes.String()
         );
         builder.addStateStore(accountBalanceStoreBuilder);
 
@@ -43,7 +45,7 @@ public class AccountBalanceCalculationTopology {
                 .selectKey((key, value) -> value.getAccount())
                 .peek((key, value) -> log.info("output - key: {}, value: {}", key, value), Named.as("log-output"))
                 .to("account-balances",
-                        Produced.with(TransactionSerdes.accountBalanceKey(), TransactionSerdes.accountBalance()));
+                        Produced.with(Serdes.String(), TransactionSerdes.accountBalance()));
 
         return builder.build();
     }

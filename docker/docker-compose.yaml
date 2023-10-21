@@ -1,0 +1,32 @@
+services:
+  kafka:
+    image: landoop/fast-data-dev:latest
+    environment:
+      - ADV_HOST=127.0.0.1
+      - SAMPLEDATA=0
+      - RUNTESTS=0
+    ports:
+      - 3030:3030
+      - 9092:9092
+      - 2181:2181
+      - 8081:8081
+    depends_on:
+      - mysql
+
+  mysql:
+    image: mysql:8
+    command: --default-authentication-plugin=mysql_native_password
+    environment:
+      MYSQL_ROOT_PASSWORD: Password!@
+    ports:
+      - 3306:3306
+    volumes:
+      - "./mysql/schema.sql:/docker-entrypoint-initdb.d/1.sql"
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    ports:
+      - 8080:80
+    environment:
+      PMA_HOSTS: mysql
+    depends_on:
+      - mysql

@@ -19,12 +19,13 @@
 		<module>producer</module>
 		<module>transaction-filter-topology</module>
 		<module>account-balance-calculation-topology</module>
-	</modules>
+        <module>avro-schema</module>
+    </modules>
 	<properties>
 		<java.version>17</java.version>
 		<testcontainers.version>1.19.1</testcontainers.version>
 		<io.confluent.version>7.3.1</io.confluent.version>
-		<avro.version>1.11.0</avro.version>
+		<avro.version>1.11.3</avro.version>
 		<commons-csv.version>1.10.0</commons-csv.version>
 		<org.apache.kafka.version>3.5.0</org.apache.kafka.version>
 		<commons-lang3.version>3.13.0</commons-lang3.version>
@@ -43,6 +44,21 @@
 				<groupId>org.apache.avro</groupId>
 				<artifactId>avro</artifactId>
 				<version>${avro.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>io.confluent</groupId>
+				<artifactId>kafka-schema-registry-client</artifactId>
+				<version>${io.confluent.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>io.confluent</groupId>
+				<artifactId>kafka-avro-serializer</artifactId>
+				<version>${io.confluent.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>io.confluent</groupId>
+				<artifactId>kafka-streams-avro-serde</artifactId>
+				<version>${io.confluent.version}</version>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.commons</groupId>

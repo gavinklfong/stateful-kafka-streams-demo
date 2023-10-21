@@ -1,11 +1,12 @@
 package space.gavinklfong.demo.finance.topology;
 
 import lombok.extern.slf4j.Slf4j;
+import org.apache.kafka.common.serialization.Serdes;
 import org.apache.kafka.streams.*;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import space.gavinklfong.demo.finance.model.AccountBalance;
+import space.gavinklfong.demo.finance.schema.AccountBalance;
 import space.gavinklfong.demo.finance.model.Transaction;
 import space.gavinklfong.demo.finance.model.TransactionKey;
 import space.gavinklfong.demo.finance.util.AccountBalanceLoader;
@@ -40,7 +41,7 @@ class AccountBalanceCalculationTopologyTest {
                 TransactionSerdes.transactionKey().serializer(),
                 TransactionSerdes.transaction().serializer());
         outputTopic = testDriver.createOutputTopic("account-balances",
-                TransactionSerdes.accountBalanceKey().deserializer(),
+                Serdes.String().deserializer(),
                 TransactionSerdes.accountBalance().deserializer());
     }
 
