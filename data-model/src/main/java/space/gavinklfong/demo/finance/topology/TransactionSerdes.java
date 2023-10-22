@@ -9,6 +9,8 @@ import org.springframework.kafka.support.serializer.JsonSerde;
 import space.gavinklfong.demo.finance.model.Transaction;
 import space.gavinklfong.demo.finance.model.TransactionKey;
 import space.gavinklfong.demo.finance.schema.AccountBalance;
+import space.gavinklfong.demo.finance.schema.LoanRequest;
+import space.gavinklfong.demo.finance.schema.LoanResponse;
 
 import java.util.Map;
 
@@ -29,6 +31,18 @@ public class TransactionSerdes {
 
     private static Map<String, String> getSerDeConfig() {
         return Map.of(JsonDeserializer.TRUSTED_PACKAGES, "space.gavinklfong.demo.finance.model");
+    }
+
+    public static SpecificAvroSerde<LoanRequest> loanRequest() {
+        SpecificAvroSerde<LoanRequest> serde = new SpecificAvroSerde<>();
+        serde.configure(getAvroSerdeConfig(), false);
+        return serde;
+    }
+
+    public static SpecificAvroSerde<LoanResponse> loanResponse() {
+        SpecificAvroSerde<LoanResponse> serde = new SpecificAvroSerde<>();
+        serde.configure(getAvroSerdeConfig(), false);
+        return serde;
     }
 
     public static SpecificAvroSerde<AccountBalance> accountBalance() {

@@ -15,7 +15,6 @@ import org.apache.kafka.streams.state.StoreBuilder;
 import org.apache.kafka.streams.state.Stores;
 import space.gavinklfong.demo.finance.model.Transaction;
 import space.gavinklfong.demo.finance.model.TransactionKey;
-import space.gavinklfong.demo.finance.schema.AccountBalance;
 
 import java.math.BigDecimal;
 
