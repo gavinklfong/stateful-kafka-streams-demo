@@ -20,6 +20,7 @@
 		<module>transaction-filter-topology</module>
 		<module>account-balance-calculation-topology</module>
         <module>avro-schema</module>
+        <module>loan-evaluation-service</module>
     </modules>
 	<properties>
 		<java.version>17</java.version>

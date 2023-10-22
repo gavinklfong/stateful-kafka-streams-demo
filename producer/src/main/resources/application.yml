@@ -3,7 +3,7 @@ spring:
   main:
     web-application-type: none
   application:
-    name: shopping-order-producer
+    name: transaction-producer
   kafka:
     bootstrap-servers: localhost:9092
     schema-registry: http://localhost:8081
