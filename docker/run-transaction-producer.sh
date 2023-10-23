@@ -1,1 +1,1 @@
-docker run --rm --net=host whalebig27/transaction-producer:latest
+docker run --name transaction-producer --rm --net=host whalebig27/transaction-producer:latest

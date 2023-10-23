@@ -15,6 +15,7 @@ import java.time.ZoneId;
 import java.util.List;
 import java.util.UUID;
 
+import static java.util.Objects.isNull;
 import static java.util.Objects.nonNull;
 
 @Slf4j
@@ -44,7 +45,17 @@ public class AccountBalanceCalculator implements Processor<TransactionKey, Trans
             case WITHDRAWAL, FEE -> List.of(debitAccount(transaction.getFromAccount(), transaction.getAmount(), transaction.getTimestamp()));
             case TRANSFER -> List.of(creditAccount(transaction.getToAccount(), transaction.getAmount(), transaction.getTimestamp()),
                     debitAccount(transaction.getFromAccount(), transaction.getAmount(), transaction.getTimestamp()));
+            default -> List.of(buildDefaultAccountBalance(transaction));
         };
+    }
+
+    private AccountBalance buildDefaultAccountBalance(Transaction transaction) {
+        String account = nonNull(transaction.getFromAccount())? transaction.getFromAccount(): transaction.getToAccount();
+        return AccountBalance.newBuilder()
+                .setAccount(account)
+                .setAmount(retrieveAccountBalance(account))
+                .setTimestamp(transaction.getTimestamp().atZone(ZoneId.systemDefault()).toInstant())
+                .build();
     }
 
     private AccountBalance creditAccount(String account, BigDecimal amount, LocalDateTime timestamp) {

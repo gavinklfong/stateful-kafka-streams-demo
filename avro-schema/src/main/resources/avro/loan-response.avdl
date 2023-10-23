@@ -1,0 +1,18 @@
+@namespace("space.gavinklfong.demo.finance.schema")
+protocol AppProtocol {
+
+	enum EvaluationResult {
+		APPROVED,
+		REJECTED,
+		REVIEW_NEEDED
+	}
+
+	record LoanResponse {
+		string requestId;
+		string account;
+		decimal(14,2) amount;
+		timestamp_ms timestamp;
+		EvaluationResult result;
+	}
+}
+
