@@ -1,8 +1,8 @@
+server:
+  port: 8004
 spring:
-  main:
-    web-application-type: none
   application:
-    name: loan-evaluation-service
+    name: loan-evaluation-topology
   kafka:
     bootstrap-servers: localhost:9092
     consumer:
@@ -11,15 +11,6 @@ spring:
       properties:
         schema.registry.url: http://localhost:8081
         specific.avro.reader: true
-  jpa:
-    hibernate:
-      ddl-auto: none
-    show-sql: true
-  datasource:
-    url: jdbc:mysql://localhost:3306/loan
-    username: root
-    password: Password!@
-
 loan:
   input:
     topic: loan-requests

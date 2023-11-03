@@ -10,8 +10,8 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.kafka.config.TopicBuilder;
 import org.springframework.kafka.support.converter.ByteArrayJsonMessageConverter;
 import org.springframework.kafka.support.converter.RecordMessageConverter;
-import space.gavinklfong.demo.finance.schema.LoanResponse;
-import space.gavinklfong.demo.finance.schema.LoanResponseKey;
+import space.gavinklfong.demo.finance.schema.LoanRequest;
+import space.gavinklfong.demo.finance.schema.LoanRequestKey;
 
 import java.util.Properties;
 
@@ -19,12 +19,12 @@ import java.util.Properties;
 public class KafkaConfig {
 
     @Bean
-    public NewTopic loanResultTopic(@Value("${loan.output.topic}") String outputTopic) {
-        return TopicBuilder.name(outputTopic).build();
+    public NewTopic loanRequestTopic(@Value("${loan.input.topic}") String inputTopic) {
+        return TopicBuilder.name(inputTopic).build();
     }
 
     @Bean
-    public KafkaProducer<LoanResponseKey, LoanResponse> createLoanEvaluationResponseProducer(@Value("${spring.kafka.bootstrap-servers}") String kafkaServer) {
+    public KafkaProducer<LoanRequestKey, LoanRequest> createLoanRequestProducer(@Value("${spring.kafka.bootstrap-servers}") String kafkaServer) {
         Properties props = new Properties();
         props.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, kafkaServer);
         props.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, KafkaAvroSerializer.class);

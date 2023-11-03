@@ -7,6 +7,7 @@ import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Component;
 
 import space.gavinklfong.demo.finance.schema.LoanRequest;
+import space.gavinklfong.demo.finance.schema.LoanRequestKey;
 import space.gavinklfong.demo.finance.schema.LoanResponse;
 import space.gavinklfong.finance.service.LoanEvaluationService;
 import space.gavinklfong.finance.service.LoanResultSender;
@@ -19,7 +20,7 @@ public class LoanRequestListener {
     private final LoanResultSender loanResultSender;
 
     @KafkaListener(id = "loan-request-handler", topics = "loan-requests", batch = "1")
-    public void handleLoanRequestEvent(ConsumerRecord<String, LoanRequest> data)  {
+    public void handleLoanRequestEvent(ConsumerRecord<LoanRequestKey, LoanRequest> data)  {
         log.info("Loan request received: key={}, value={}", data.key(), data.value());
         LoanResponse response = loanEvaluationService.evaluate(data.value());
         log.info("Sending loan evaluation result: {}", response);
