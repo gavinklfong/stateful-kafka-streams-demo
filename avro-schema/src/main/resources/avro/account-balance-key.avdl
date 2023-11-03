@@ -1,0 +1,8 @@
+@namespace("space.gavinklfong.demo.finance.schema")
+protocol AppProtocol {
+
+	record AccountBalanceKey {
+		string account;
+	}
+}
+

@@ -15,8 +15,7 @@ import org.apache.kafka.streams.state.StoreBuilder;
 import org.apache.kafka.streams.state.Stores;
 import space.gavinklfong.demo.finance.model.Transaction;
 import space.gavinklfong.demo.finance.model.TransactionKey;
-
-import java.math.BigDecimal;
+import space.gavinklfong.demo.finance.schema.AccountBalanceKey;
 
 @Slf4j
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
@@ -41,11 +40,17 @@ public class AccountBalanceCalculationTopology {
 
         source.process(AccountBalanceCalculator::new, Named.as("account-balance-calculator"), STATE_STORE)
                 .flatMapValues(v -> v)
-                .selectKey((key, value) -> value.getAccount())
+                .selectKey((key, value) -> buildAccountBalanceKey(value.getAccount()))
                 .peek((key, value) -> log.info("output - key: {}, value: {}", key, value), Named.as("log-output"))
                 .to("account-balances",
-                        Produced.with(Serdes.String(), TransactionSerdes.accountBalance()));
+                        Produced.with(TransactionSerdes.accountBalanceKey(), TransactionSerdes.accountBalance()));
 
         return builder.build();
+    }
+
+    private static AccountBalanceKey buildAccountBalanceKey(String account) {
+        return AccountBalanceKey.newBuilder()
+                .setAccount(account)
+                .build();
     }
 }

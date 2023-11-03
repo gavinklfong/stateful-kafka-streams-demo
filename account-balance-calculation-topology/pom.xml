@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>space.gavinklfong.demo</groupId>
-        <artifactId>transaction-producer</artifactId>
+        <artifactId>stateful-kafka-streams-demo</artifactId>
         <version>0.0.1</version>
     </parent>
 

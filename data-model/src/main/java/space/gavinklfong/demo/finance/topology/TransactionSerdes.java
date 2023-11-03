@@ -9,6 +9,7 @@ import org.springframework.kafka.support.serializer.JsonSerde;
 import space.gavinklfong.demo.finance.model.Transaction;
 import space.gavinklfong.demo.finance.model.TransactionKey;
 import space.gavinklfong.demo.finance.schema.AccountBalance;
+import space.gavinklfong.demo.finance.schema.AccountBalanceKey;
 import space.gavinklfong.demo.finance.schema.LoanRequest;
 import space.gavinklfong.demo.finance.schema.LoanResponse;
 
@@ -48,6 +49,12 @@ public class TransactionSerdes {
     public static SpecificAvroSerde<AccountBalance> accountBalance() {
         SpecificAvroSerde<AccountBalance> serde = new SpecificAvroSerde<>();
         serde.configure(getAvroSerdeConfig(), false);
+        return serde;
+    }
+
+    public static SpecificAvroSerde<AccountBalanceKey> accountBalanceKey() {
+        SpecificAvroSerde<AccountBalanceKey> serde = new SpecificAvroSerde<>();
+        serde.configure(getAvroSerdeConfig(), true);
         return serde;
     }
 
