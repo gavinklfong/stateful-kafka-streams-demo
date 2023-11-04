@@ -10,8 +10,8 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.kafka.config.TopicBuilder;
 import org.springframework.kafka.support.converter.ByteArrayJsonMessageConverter;
 import org.springframework.kafka.support.converter.RecordMessageConverter;
+import space.gavinklfong.demo.finance.schema.Account;
 import space.gavinklfong.demo.finance.schema.LoanResponse;
-import space.gavinklfong.demo.finance.schema.LoanResponseKey;
 
 import java.util.Properties;
 
@@ -24,7 +24,7 @@ public class KafkaConfig {
     }
 
     @Bean
-    public KafkaProducer<LoanResponseKey, LoanResponse> createLoanEvaluationResponseProducer(@Value("${spring.kafka.bootstrap-servers}") String kafkaServer) {
+    public KafkaProducer<Account, LoanResponse> createLoanEvaluationResponseProducer(@Value("${spring.kafka.bootstrap-servers}") String kafkaServer) {
         Properties props = new Properties();
         props.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, kafkaServer);
         props.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, KafkaAvroSerializer.class);

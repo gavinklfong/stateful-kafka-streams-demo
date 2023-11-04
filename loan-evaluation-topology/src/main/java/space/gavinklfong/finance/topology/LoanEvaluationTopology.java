@@ -3,7 +3,6 @@ package space.gavinklfong.finance.topology;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.kafka.common.serialization.Serdes;
 import org.apache.kafka.streams.StreamsBuilder;
 import org.apache.kafka.streams.Topology;
 import org.apache.kafka.streams.kstream.*;
@@ -24,21 +23,18 @@ public class LoanEvaluationTopology {
 
         StreamsBuilder builder = new StreamsBuilder();
 
-        KStream<String, LoanRequest> loanRequests = builder.stream("loan-requests",
-                Consumed.with(TransactionSerdes.loanRequestKey(), TransactionSerdes.loanRequest()))
-                .selectKey((k,v) -> k.getAccount())
+        KStream<Account, LoanRequest> loanRequests = builder.stream("loan-requests",
+                Consumed.with(TransactionSerdes.accountKey(), TransactionSerdes.loanRequest()))
                 .peek((key, value) -> log.info("input - key: {}, value: {}", key, value), Named.as("log-input"));
 
-        KTable<String, AccountBalance> accountBalanceTable = builder.stream("account-balances",
-                        Consumed.with(TransactionSerdes.accountBalanceKey(), TransactionSerdes.accountBalance()))
-                        .selectKey((k,v) -> k.getAccount())
+        KTable<Account, AccountBalance> accountBalanceTable = builder.stream("account-balances",
+                        Consumed.with(TransactionSerdes.accountKey(), TransactionSerdes.accountBalance()))
                         .toTable(Named.as("account-balances-table"));
 
         loanRequests.leftJoin(accountBalanceTable, LoanEvaluationTopology::evaluate)
                 .peek((key, value) -> log.info("output - key: {}, value: {}", key, value), Named.as("log-output"))
-                .selectKey((k,v) -> buildLoanResponseKey(k))
                 .to("loan-evaluation-results",
-                        Produced.with(TransactionSerdes.loanResponseKey(), TransactionSerdes.loanResponse()));
+                        Produced.with(TransactionSerdes.accountKey(), TransactionSerdes.loanResponse()));
 
         return builder.build();
     }
@@ -67,11 +63,5 @@ public class LoanEvaluationTopology {
         } else {
             return EvaluationResult.REJECTED;
         }
-    }
-
-    private static LoanResponseKey buildLoanResponseKey(String account) {
-        return LoanResponseKey.newBuilder()
-                .setAccount(account)
-                .build();
     }
 }

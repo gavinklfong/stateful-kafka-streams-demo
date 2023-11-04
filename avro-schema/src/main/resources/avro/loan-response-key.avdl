@@ -1,8 +1,0 @@
-@namespace("space.gavinklfong.demo.finance.schema")
-protocol AppProtocol {
-
-	record LoanResponseKey {
-		string account;
-	}
-}
-

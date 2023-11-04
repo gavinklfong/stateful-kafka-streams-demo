@@ -11,7 +11,7 @@ import space.gavinklfong.finance.topology.LoanEvaluationTopology;
 import java.util.Properties;
 
 @Slf4j
-public class LoanEvaluationTopologyApplication {
+public class LoanEvaluationTopologyRunner {
     public static void main(String[] args) {
         Properties props = new Properties();
         props.put(StreamsConfig.APPLICATION_ID_CONFIG, "loan-evaluation-topology");

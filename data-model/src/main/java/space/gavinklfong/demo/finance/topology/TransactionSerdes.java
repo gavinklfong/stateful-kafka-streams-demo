@@ -31,21 +31,9 @@ public class TransactionSerdes {
         return Map.of(JsonDeserializer.TRUSTED_PACKAGES, "space.gavinklfong.demo.finance.model");
     }
 
-    public static SpecificAvroSerde<LoanRequestKey> loanRequestKey() {
-        SpecificAvroSerde<LoanRequestKey> serde = new SpecificAvroSerde<>();
-        serde.configure(getAvroSerdeConfig(), true);
-        return serde;
-    }
-
     public static SpecificAvroSerde<LoanRequest> loanRequest() {
         SpecificAvroSerde<LoanRequest> serde = new SpecificAvroSerde<>();
         serde.configure(getAvroSerdeConfig(), false);
-        return serde;
-    }
-
-    public static SpecificAvroSerde<LoanResponseKey> loanResponseKey() {
-        SpecificAvroSerde<LoanResponseKey> serde = new SpecificAvroSerde<>();
-        serde.configure(getAvroSerdeConfig(), true);
         return serde;
     }
 
@@ -61,8 +49,8 @@ public class TransactionSerdes {
         return serde;
     }
 
-    public static SpecificAvroSerde<AccountBalanceKey> accountBalanceKey() {
-        SpecificAvroSerde<AccountBalanceKey> serde = new SpecificAvroSerde<>();
+    public static SpecificAvroSerde<Account> accountKey() {
+        SpecificAvroSerde<Account> serde = new SpecificAvroSerde<>();
         serde.configure(getAvroSerdeConfig(), true);
         return serde;
     }
