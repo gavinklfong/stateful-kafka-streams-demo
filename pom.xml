@@ -12,8 +12,8 @@
 	<artifactId>stateful-kafka-streams-demo</artifactId>
 	<version>0.0.1</version>
 	<packaging>pom</packaging>
-	<name>transaction-producer</name>
-	<description>Kafka Transaction Producer</description>
+	<name>stateful-kafka-streams-demo</name>
+	<description>Statefull Kafka Streams Demo</description>
 	<modules>
 		<module>data-model</module>
 		<module>avro-schema</module>
