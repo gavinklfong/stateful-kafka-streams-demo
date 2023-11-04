@@ -9,7 +9,7 @@
         <version>0.0.1</version>
     </parent>
 
-    <artifactId>loan-evaluation-service-stream</artifactId>
+    <artifactId>loan-evaluation-topology</artifactId>
 
     <properties>
         <maven.compiler.source>17</maven.compiler.source>

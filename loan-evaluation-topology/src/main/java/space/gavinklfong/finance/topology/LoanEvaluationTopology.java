@@ -3,14 +3,10 @@ package space.gavinklfong.finance.topology;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.kafka.common.serialization.Serdes;
 import org.apache.kafka.streams.StreamsBuilder;
 import org.apache.kafka.streams.Topology;
 import org.apache.kafka.streams.kstream.*;
-import space.gavinklfong.demo.finance.schema.AccountBalance;
-import space.gavinklfong.demo.finance.schema.EvaluationResult;
-import space.gavinklfong.demo.finance.schema.LoanRequest;
-import space.gavinklfong.demo.finance.schema.LoanResponse;
+import space.gavinklfong.demo.finance.schema.*;
 import space.gavinklfong.demo.finance.topology.TransactionSerdes;
 
 import java.math.BigDecimal;
@@ -27,19 +23,18 @@ public class LoanEvaluationTopology {
 
         StreamsBuilder builder = new StreamsBuilder();
 
-        KStream<String, LoanRequest> loanRequests = builder.stream("loan-requests",
-                Consumed.with(Serdes.String(), TransactionSerdes.loanRequest()))
+        KStream<Account, LoanRequest> loanRequests = builder.stream("loan-requests",
+                Consumed.with(TransactionSerdes.accountKey(), TransactionSerdes.loanRequest()))
                 .peek((key, value) -> log.info("input - key: {}, value: {}", key, value), Named.as("log-input"));
 
-        KTable<String, AccountBalance> accountBalanceTable = builder.stream("account-balances",
-                        Consumed.with(Serdes.String(), TransactionSerdes.accountBalance()))
+        KTable<Account, AccountBalance> accountBalanceTable = builder.stream("account-balances",
+                        Consumed.with(TransactionSerdes.accountKey(), TransactionSerdes.accountBalance()))
                         .toTable(Named.as("account-balances-table"));
 
-        loanRequests.leftJoin(accountBalanceTable,
-                (loanRequest, accountBalance) -> evaluate(loanRequest, accountBalance))
+        loanRequests.leftJoin(accountBalanceTable, LoanEvaluationTopology::evaluate)
                 .peek((key, value) -> log.info("output - key: {}, value: {}", key, value), Named.as("log-output"))
                 .to("loan-evaluation-results",
-                        Produced.with(Serdes.String(), TransactionSerdes.loanResponse()));
+                        Produced.with(TransactionSerdes.accountKey(), TransactionSerdes.loanResponse()));
 
         return builder.build();
     }
