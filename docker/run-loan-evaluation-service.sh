@@ -1,1 +1,1 @@
-docker run --name loan-evaluation-service --rm --net=host -p 8004:8004 whalebig27/loan-evaluation-service:latest
+docker run --name loan-evaluation-service --rm --net=host whalebig27/loan-evaluation-service:latest

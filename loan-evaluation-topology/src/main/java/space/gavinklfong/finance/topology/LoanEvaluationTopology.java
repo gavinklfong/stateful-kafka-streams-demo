@@ -3,9 +3,11 @@ package space.gavinklfong.finance.topology;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.kafka.common.utils.Bytes;
 import org.apache.kafka.streams.StreamsBuilder;
 import org.apache.kafka.streams.Topology;
 import org.apache.kafka.streams.kstream.*;
+import org.apache.kafka.streams.state.KeyValueStore;
 import space.gavinklfong.demo.finance.schema.*;
 import space.gavinklfong.demo.finance.topology.TransactionSerdes;
 
@@ -29,7 +31,9 @@ public class LoanEvaluationTopology {
 
         KTable<Account, AccountBalance> accountBalanceTable = builder.stream("account-balances",
                         Consumed.with(TransactionSerdes.accountKey(), TransactionSerdes.accountBalance()))
-                        .toTable(Named.as("account-balances-table"));
+                        .toTable(Materialized.<Account, AccountBalance, KeyValueStore<Bytes, byte[]>>as("account-balances-table")
+                                .withKeySerde(TransactionSerdes.accountKey())
+                                .withValueSerde(TransactionSerdes.accountBalance()));
 
         loanRequests.leftJoin(accountBalanceTable, LoanEvaluationTopology::evaluate)
                 .peek((key, value) -> log.info("output - key: {}, value: {}", key, value), Named.as("log-output"))

@@ -1,1 +1,1 @@
-docker run --name account-balance-calculation-topology --rm --net=host whalebig27/account-balance-calculation-topology:v2
+docker run --name account-balance-calculation-topology --rm --net=host whalebig27/account-balance-calculation-topology:latest
