@@ -3,13 +3,14 @@ package space.gavinklfong.finance.topology;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.kafka.common.serialization.Serde;
 import org.apache.kafka.common.utils.Bytes;
 import org.apache.kafka.streams.StreamsBuilder;
 import org.apache.kafka.streams.Topology;
 import org.apache.kafka.streams.kstream.*;
 import org.apache.kafka.streams.state.KeyValueStore;
 import space.gavinklfong.demo.finance.schema.*;
-import space.gavinklfong.demo.finance.topology.TransactionSerdes;
+import space.gavinklfong.demo.finance.topology.SerdeFactory;
 
 import java.math.BigDecimal;
 import java.time.Instant;
@@ -21,24 +22,28 @@ import static org.apache.commons.lang3.compare.ComparableUtils.is;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class LoanEvaluationTopology {
 
-    public static Topology build() {
+    public static Topology build(SerdeFactory serdeFactory) {
+        Serde<Account> accountKeySerde = serdeFactory.getSerde(true);
+        Serde<AccountBalance> accountBalanceSerde = serdeFactory.getSerde(false);
+        Serde<LoanRequest> loanRequestSerde = serdeFactory.getSerde(false);
+        Serde<LoanResponse> loanResponseSerde = serdeFactory.getSerde(false);
 
         StreamsBuilder builder = new StreamsBuilder();
 
         KStream<Account, LoanRequest> loanRequests = builder.stream("loan-requests",
-                Consumed.with(TransactionSerdes.accountKey(), TransactionSerdes.loanRequest()))
+                Consumed.with(accountKeySerde, loanRequestSerde))
                 .peek((key, value) -> log.info("input - key: {}, value: {}", key, value), Named.as("log-input"));
 
         KTable<Account, AccountBalance> accountBalanceTable = builder.stream("account-balances",
-                        Consumed.with(TransactionSerdes.accountKey(), TransactionSerdes.accountBalance()))
+                        Consumed.with(accountKeySerde, accountBalanceSerde))
                         .toTable(Materialized.<Account, AccountBalance, KeyValueStore<Bytes, byte[]>>as("account-balances-table")
-                                .withKeySerde(TransactionSerdes.accountKey())
-                                .withValueSerde(TransactionSerdes.accountBalance()));
+                                .withKeySerde(accountKeySerde)
+                                .withValueSerde(accountBalanceSerde));
 
         loanRequests.leftJoin(accountBalanceTable, LoanEvaluationTopology::evaluate)
                 .peek((key, value) -> log.info("output - key: {}, value: {}", key, value), Named.as("log-output"))
                 .to("loan-evaluation-results",
-                        Produced.with(TransactionSerdes.accountKey(), TransactionSerdes.loanResponse()));
+                        Produced.with(accountKeySerde, loanResponseSerde));
 
         return builder.build();
     }
