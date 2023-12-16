@@ -34,6 +34,7 @@
 		<commons-lang3.version>3.13.0</commons-lang3.version>
 		<commons-math3.version>3.6.1</commons-math3.version>
 		<dockerfile-maven.version>1.4.13</dockerfile-maven.version>
+		<junit-jupiter.version>5.10.1</junit-jupiter.version>
 	</properties>
 	<dependencyManagement>
 		<dependencies>
@@ -84,6 +85,12 @@
 				<groupId>org.apache.commons</groupId>
 				<artifactId>commons-math3</artifactId>
 				<version>${commons-math3.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.junit.jupiter</groupId>
+				<artifactId>junit-jupiter</artifactId>
+				<version>${junit-jupiter.version}</version>
+				<scope>test</scope>
 			</dependency>
 		</dependencies>
 	</dependencyManagement>

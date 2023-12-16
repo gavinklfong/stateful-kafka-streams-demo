@@ -4,6 +4,8 @@ import io.confluent.kafka.serializers.AbstractKafkaSchemaSerDeConfig;
 import io.confluent.kafka.streams.serdes.avro.SpecificAvroSerde;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
+import org.apache.avro.specific.SpecificRecord;
+import org.apache.kafka.common.serialization.Serde;
 import org.springframework.kafka.support.serializer.JsonDeserializer;
 import org.springframework.kafka.support.serializer.JsonSerde;
 import space.gavinklfong.demo.finance.model.Transaction;
@@ -52,6 +54,12 @@ public class TransactionSerdes {
     public static SpecificAvroSerde<Account> accountKey() {
         SpecificAvroSerde<Account> serde = new SpecificAvroSerde<>();
         serde.configure(getAvroSerdeConfig(), true);
+        return serde;
+    }
+
+    public static <T extends SpecificRecord> Serde<T> getSerde(boolean isKey, Map<String, String> config) {
+        Serde<T> serde = new SpecificAvroSerde<>();
+        serde.configure(config, isKey);
         return serde;
     }
 
