@@ -1,0 +1,10 @@
+kafka:
+  brokers: ["kafka:9092"]
+  schemaRegistry:
+    enabled: true
+    urls: ["http://kafka:8081"]
+connect:
+  enabled: true
+  clusters:
+    - name: demo
+      url: http://kafka:8083
