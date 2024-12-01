@@ -10,6 +10,12 @@ services:
       - 9092:9092
       - 2181:2181
       - 8081:8081
+      - 8083:8083
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8081"]
+      interval: 10s
+      timeout: 10s
+      retries: 5
     depends_on:
       - mysql
 
@@ -25,7 +31,7 @@ services:
   phpmyadmin:
     image: phpmyadmin/phpmyadmin
     ports:
-      - 8080:80
+      - 7080:80
     environment:
       PMA_HOSTS: mysql
     depends_on:

@@ -1,0 +1,10 @@
+kafka:
+  brokers: ["localhost:9092"]
+  schemaRegistry:
+    enabled: true
+    urls: ["http://localhost:8081"]
+connect:
+  enabled: true
+  clusters:
+    - name: demo
+      url: http://localhost:8083
